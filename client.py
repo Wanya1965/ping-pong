@@ -1,3 +1,4 @@
+
 from pygame import *
 import socket
 import json
@@ -9,12 +10,13 @@ init()
 screen = display.set_mode((WIDTH, HEIGHT))
 clock = time.Clock()
 display.set_caption("Пінг-Понг")
+background = transform.scale(image.load("Grass_04.png"), [WIDTH, HEIGHT])
 # ---СЕРВЕР ---
 def connect_to_server():
     while True:
         try:
             client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.connect(('192.168.0.119', 8080)) # ---- Підключення до сервера
+            client.connect(('192.168.0.133', 8080)) # ---- Підключення до сервера
             buffer = ""
             game_state = {}
             my_id = int(client.recv(24).decode())
@@ -56,7 +58,8 @@ while True:
             exit()
 
     if "countdown" in game_state and game_state["countdown"] > 0:
-        screen.fill((0, 0, 0))
+        #screen.fill((0, 0, 0))
+        screen.blit(background, (0,0))
         countdown_text = font.Font(None, 72).render(str(game_state["countdown"]), True, (255, 255, 255))
         screen.blit(countdown_text, (WIDTH // 2 - 20, HEIGHT // 2 - 30))
         display.update()
@@ -88,7 +91,8 @@ while True:
         continue  # Блокує гру після перемоги
 
     if game_state:
-        screen.fill((30, 30, 30))
+        #screen.fill((30, 30, 30))
+        screen.blit(background, (0,0))
         draw.rect(screen, (0, 255, 0), (20, game_state['paddles']['0'], 20, 100))
         draw.rect(screen, (255, 0, 255), (WIDTH - 40, game_state['paddles']['1'], 20, 100))
         draw.circle(screen, (255, 255, 255), (game_state['ball']['x'], game_state['ball']['y']), 10)
